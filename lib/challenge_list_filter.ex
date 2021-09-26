@@ -1,18 +1,27 @@
 defmodule ChallengeListFilter do
-  @moduledoc """
-  Documentation for `ChallengeListFilter`.
-  """
+  require Integer
 
-  @doc """
-  Hello world.
+  def call(list) do
+    list
+    |> only_numbers()
+    |> only_odds()
+    |> count()
+  end
 
-  ## Examples
+  defp only_numbers(list) do
+    list |> Enum.flat_map(fn x ->
+                    case Integer.parse(x) do
+                      {int, _rest} -> [int]
+                      :error -> []
+                    end
+                  end)
+  end
 
-      iex> ChallengeListFilter.hello()
-      :world
+  defp only_odds(list) do
+    list |> Enum.filter(fn x -> Integer.is_odd(x) end)
+  end
 
-  """
-  def hello do
-    :world
+  defp count(list) do
+    list |> Enum.count()
   end
 end
